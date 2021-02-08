@@ -1,0 +1,38 @@
+*{
+    margin:0;
+    padding:0;
+}
+.header{
+    width:100%;
+    /* height:80px; */
+    background-color:rgb(78, 181, 255);
+    text-align: center;
+}
+.content{
+    height:1000px;
+    background-color: wheat;
+}
+.notion{
+    height:60px;
+    background-color: white;
+    text-align: center;
+    color:black;
+}
+.notion:hover{
+    height:70px;
+    font-size: large;
+}
+.content a{
+    text-decoration:none;
+}
+
+
+
+
+.footer{
+    width:100%;
+    /* height:80px; */
+    background-color:rgb(59, 59, 59);
+    text-align: center;
+    color:white;
+}

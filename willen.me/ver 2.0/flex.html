@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>弹性布局</title>
+    <script>
+        //使用全局变量，传递当前正在修改的id编号
+        var _id;
+
+        //调整容器的尺寸和颜色
+        function setContainerSize(){
+            //获取输入值
+            var containerWidth=document.getElementById("container_width_control").value;  
+            var containerHeight=document.getElementById("container_height_control").value;
+            var containerBgcolor=document.getElementById("container_bgcolor_control").value;
+            //将输入值在右侧实时呈现
+            document.getElementById("container_width_show").innerHTML=containerWidth+"px";
+            document.getElementById("container_height_show").innerHTML=containerHeight+"px";
+            document.getElementById("container_bgcolor_show").innerHTML=containerBgcolor;
+            //改变容器
+            document.getElementById("flex_container").style.width = `${containerWidth}px`;
+            document.getElementById("flex_container").style.height = `${containerHeight}px`;
+            document.getElementById("flex_container").style.backgroundColor = containerBgcolor;
+        }
+
+
+        // 根据clickItem()所传过来的id，调整对应项目的宽，高和背景颜色
+        function setItemSize(id){
+            //当对应的输入框被输入时触发匿名函数
+            document.getElementById("item_width_control").oninput=function(){
+                //获取输入的值
+                var itemWidth=document.getElementById("item_width_control").value;
+                //将值在右边实时显示出来
+                document.getElementById("item_width_show").innerHTML=itemWidth+"px";
+                //将值赋给对应的项目
+                document.getElementById(`${id}`).style.width = `${itemWidth}px`;
+            }
+            document.getElementById("item_height_control").oninput=function(){
+                var itemHeight=document.getElementById("item_height_control").value;
+                document.getElementById("item_height_show").innerHTML=itemHeight+"px";
+                document.getElementById(`${id}`).style.height = `${itemHeight}px`;
+            }
+            document.getElementById("item_bgcolor_control").oninput=function(){
+                var itemBgcolor=document.getElementById("item_bgcolor_control").value;
+                document.getElementById("item_bgcolor_show").innerHTML=itemBgcolor;
+                document.getElementById(`${id}`).style.backgroundColor = itemBgcolor;
+            }
+            document.getElementById("item_font_control").oninput=function(){
+                var itemFont=document.getElementById("item_font_control").value;
+                document.getElementById("item_font_show").innerHTML=itemFont+"px";
+                document.getElementById(`${id}`).style.fontSize = itemFont+"px";
+            }
+        }
+
+        //点击项目所发生的事件
+        //1.获取所点击的项目编号，宽度，高度，背景颜色,字体
+        //2.调整面板上控件的数值
+        function clickItem(id){
+            _id=id;
+            var ele=document.getElementById(`${_id}`)//获取当前元素
+            //在面板上显示正在调整的序号
+            var nth=(Number(_id.slice(1,2)));
+            document.getElementById("explain_setting").innerHTML=`正在调整第${nth}个项目`;
+
+            //获取当前div的宽度
+            var _width=ele.offsetWidth;
+            //将宽度数值给到控制条
+            document.getElementById("item_width_control").value=_width;
+            //将宽度数值显示在控制条右侧
+            document.getElementById("item_width_show").innerHTML=_width+"px";
+
+            //对宽度进行同样操作
+            var _height=ele.offsetHeight;
+            document.getElementById("item_height_control").value=_height;
+            document.getElementById("item_height_show").innerHTML=_height+"px";
+
+            //获取当前div的背景颜色，为rgb格式
+            var bgcolorRGB=window.getComputedStyle(ele,null).getPropertyValue("background-color");
+            // 转换为HEX格式
+            var color=bgcolorRGB.match(/\d+/g);
+            var bgcolorHEX="#";
+            for(var i=0;i<3;i++){
+                bgcolorHEX+=("0"+Number(color[i]).toString(16)).slice(-2);
+            }
+            document.getElementById("item_bgcolor_control").value=bgcolorHEX;
+            document.getElementById("item_bgcolor_show").innerHTML=bgcolorHEX;
+
+            //获取字体大小
+            var fontSize=window.getComputedStyle(ele,null).getPropertyValue("font-size");
+            document.getElementById("item_font_control").value=fontSize;
+            document.getElementById("item_font_show").innerHTML=fontSize;
+
+
+            setItemSize(_id);//将id传给函数setItemSize()
+            return _id;
+            //将获取到的值给到面板里的输入框
+        }
+
+
+        
+        // function hideSetItemSize(){
+        //     document.getElementById("item_control").style.display="none";
+        // }
+
+
+        //往容器里新增项目
+        // function add(){
+        //     var newNode=document.createElement("div#d3");
+            // var divId=document.createAttribute("id");
+            // divId.value="d3";
+            // newNode.setAttributeNode(divId);
+        //     document.getElementById("flex_container").appendChild(newNode,null);
+        // }
+
+
+        //从属性调整面板获取属性值，然后作用到容器上，以实现不同的弹性布局
+        function setProperty(){
+            //循环遍历每组属性的值，当遍历到某个值被选中时，将该值作用到容器上
+            for(var i=1;i<=4;i++){
+                var checked=document.getElementById(`flex_direction_${i}`).checked;
+                var value=document.getElementById(`flex_direction_${i}`).value;
+                if(checked){
+                document.getElementById("flex_container").style.flexDirection=value;
+                }
+            }
+            for(var i=1;i<=3;i++){
+                var checked=document.getElementById(`flex_wrap_${i}`).checked;
+                var value=document.getElementById(`flex_wrap_${i}`).value;
+                if(checked){
+                document.getElementById("flex_container").style.flexWrap=value;
+                }
+            }
+            for(var i=1;i<=6;i++){
+                var checked=document.getElementById(`justify_content_${i}`).checked;
+                var value=document.getElementById(`justify_content_${i}`).value;
+                if(checked){
+                document.getElementById("flex_container").style.justifyContent=value;
+                }
+            }
+            for(var i=1;i<=5;i++){
+                var checked=document.getElementById(`align_items_${i}`).checked;
+                var value=document.getElementById(`align_items_${i}`).value;
+                if(checked){
+                document.getElementById("flex_container").style.alignItems=value;
+                }
+            }
+            for(var i=1;i<=7;i++){
+                var checked=document.getElementById(`align_content_${i}`).checked;
+                var value=document.getElementById(`align_content_${i}`).value;
+                if(checked){
+                document.getElementById("flex_container").style.alignContent=value;
+                }
+            }
+        }
+
+        //勾选“不设置高度”之后触发事件，设定选中的项目的高度为auto，并且不可再调整
+        function noHeight(){
+            var demo=document.getElementById("noHeight")
+            if(demo.checked){
+                //判断复选框状态，如果被选中，就取消高度，并且不能调整高度条
+                document.getElementById("item_height_control").disabled=true;
+                document.getElementById("item_height_control").value=0;
+                document.getElementById("item_height_show").innerHTML="无高度";
+                document.getElementById(`${_id}`).style.height="auto";
+                console.log(document.getElementById("d1").style.height);
+            }else{
+                document.getElementById("item_height_control").disabled=false;
+                document.getElementById(`${_id}`).style.height=document.getElementById("item_height_control").value;
+            }
+
+        }
+
+    </script>
+
+
+
+
+
+
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            height:100vh;
+            display: flex;
+            user-select: none;
+        }
+        
+        .aside{
+            width: 20%;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            line-height: 35px;
+            overflow-y: auto;
+        }
+        #container_panel {
+            border-right: 1px solid rgba(0, 0, 0, .12);
+        }
+        #item_panel {
+            border-left: 1px solid rgba(0, 0, 0, .12);
+        }
+
+        
+        #main {
+            width: 80%;
+            min-width:500px;
+            display:flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* 设置控制卡片的属性 */
+        .control {
+            width: 90%;
+            border: 1px solid rgba(0, 0, 0, .12);
+            border-radius: 4px;
+            margin-top: 10px;
+            margin-bottom:10px;
+            transition:0.3s ease-in-out;
+        }
+        /* 设置控制卡片的阴影 */
+        #container_panel .control{
+            box-shadow: 1px 1px 4px rgba(155, 155, 155, 0.5);
+        }
+        #item_panel .control{
+            box-shadow: -1px 1px 4px rgba(155, 155, 155, 0.5);
+        }
+        /* 设置控制卡片的悬浮阴影 */
+        #container_panel .control:hover,
+        #item_panel .control:hover
+        {
+            box-shadow: 0px 0px 16px rgba(155, 155, 155, 1);
+        }
+
+
+
+        h3{
+            border-bottom:1px solid rgba(0, 0, 0, .12);
+            padding:5px;
+            color:#0075ff;
+        }
+        h4{
+            /* padding:5px; */
+            margin-top: 15px;
+            color:#0075ff;
+        }
+        button{
+            width:40%;
+            height:30px;
+            background-color: #0075ff;
+            border:0;
+            border-radius:4px;
+            color:#fff;
+            margin:5px;
+        }
+        .explain_setting{
+            margin-left:5px;
+            color:#0075ff;
+        }
+        .explain{
+            margin-left:5px;
+            color:#999;
+            font-size: 14px;
+        }
+        #flex_property_control input{
+            margin-top:10px;
+        }
+        .control>div{
+            padding:5px;
+        }
+        #flex_container{
+            background-color: #e3e3e3;
+        }
+        #flex_property_control span{
+            display: inline-block;
+            width:80%;
+        }
+        #num_control>div{
+            text-align: center;
+        }
+
+
+
+        
+        #container_bgcolor_control,#item_bgcolor_control{
+            width:52%;
+        }
+        .control span{
+            color:#999;
+        }
+
+
+
+
+
+
+
+
+
+        #flex_container{
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            justify-content:flex-start;
+            align-items:stretch;
+            align-content:stretch;
+        }
+
+
+
+
+
+        #flex_container>div{
+            width:100px;
+            height:100px;
+            color:#fff;
+            font-size: 60px;
+            text-align: center;
+            transition:outline,opacity 0.3s ease-in-out;
+        }
+        #flex_container>div:hover{
+            /* outline:4px solid #0075ff; */
+            cursor:pointer;
+            opacity: 0.1;
+            z-index: 20;
+        }
+        /* #flex_container>div:active{
+            background-color: #000;
+        } */
+        #d1{background-color:#ef476f;}
+        #d2{background-color:#ffd166;}
+        #d3{background-color:#06d6a0;}
+        #d4{background-color:#118ab2;}
+        #d5{background-color:#218380;}
+        #d6{background-color:#073b4c;}
+
+        
+
+
+
+
+
+        #footer{
+            position: fixed;
+            bottom:0;
+            left:50%;
+            color:#ddd;
+            font-size: 12px;
+        }
+
+
+    </style>
+</head>
+
+<body onload="setContainerSize()">
+
+
+    <div id="container_panel" class="aside">
+        <div id="flex_size_control" class="control">
+            <h3>调整容器大小</h3>
+            <div>
+                <label for="container_width_control">宽度</label><input type="range" name="" id="container_width_control" min="10" max="1000" oninput="setContainerSize()" value="500"><span id="container_width_show"></span><br> 
+                <label for="container_height_control">高度</label><input type="range" name="" id="container_height_control" min="10" max="1000" oninput="setContainerSize()" value="500"><span id="container_height_show"></span><br>
+                <label for="container_bgcolor_control">颜色</label><input type="color" name="" id="container_bgcolor_control" value="#e3e3e3" oninput="setContainerSize()"><span id="container_bgcolor_show"></span>
+            </div>
+        </div>
+        <div id="flex_property_control" class="control">
+            <h3>调整容器属性</h3>
+            <div>
+                <div>
+                    <h4 title="主轴方向">flex-direction</h4>
+                    <input type="radio" name="flex_direction" id="flex_direction_1" onclick="setProperty()" value="row" checked="true"><label for="flex_direction_1"><span>row</span></label><br>
+                    <input type="radio" name="flex_direction" id="flex_direction_2" onclick="setProperty()" value="row-reverse"><label for="flex_direction_2"><span>row-reverse</span></label><br>
+                    <input type="radio" name="flex_direction" id="flex_direction_3" onclick="setProperty()" value="column"><label for="flex_direction_3"><span>column</span></label><br>
+                    <input type="radio" name="flex_direction" id="flex_direction_4" onclick="setProperty()" value="column-reverse"><label for="flex_direction_4"><span>column-reverse</span></label><br>
+                </div>
+                <div>
+                    <h4 title="是否换行">flex-wrap</h4>
+                    <input type="radio" name="flex_wrap" id="flex_wrap_1" onclick="setProperty()" value="nowrap" checked><label for="flex_wrap_1"><span>nowrap</span></label><br>
+                    <input type="radio" name="flex_wrap" id="flex_wrap_2" onclick="setProperty()" value="wrap"><label for="flex_wrap_2"><span>wrap</span></label><br>
+                    <input type="radio" name="flex_wrap" id="flex_wrap_3" onclick="setProperty()" value="wrap-reverse"><label for="flex_wrap_3"><span>wrap-reverse</span></label><br>
+                </div>
+    
+                <div>
+                    <h4 title="项目在主轴的对齐方式">justify-content</h4>
+                    <input type="radio" name="justify_content" id="justify_content_1" onclick="setProperty()" value="flex-start" checked><label for="justify_content_1"><span>flex-start</span></label><br>
+                    <input type="radio" name="justify_content" id="justify_content_2" onclick="setProperty()" value="flex-end"><label for="justify_content_2"><span>flex-end</span></label><br>
+                    <input type="radio" name="justify_content" id="justify_content_3" onclick="setProperty()" value="center"><label for="justify_content_3"><span>center</span></label><br>
+                    <input type="radio" name="justify_content" id="justify_content_4" onclick="setProperty()" value="space-between"><label for="justify_content_4"><span>space-between</span></label><br>
+                    <input type="radio" name="justify_content" id="justify_content_5" onclick="setProperty()" value="space-around"><label for="justify_content_5"><span>space-around</span></label><br>
+                    <input type="radio" name="justify_content" id="justify_content_6" onclick="setProperty()" value="space-evenly"><label for="justify_content_6"><span>space-evevnly</span></label><br>
+                </div>
+    
+                <div>
+                    <h4 title="项目在交叉轴的对齐方式">align-items</h4>
+                    <input type="radio" name="align_items" id="align_items_1" onclick="setProperty()" value="stretch" checked><label for="align_items_1"><span>stretch</span></label><br>
+                    <input type="radio" name="align_items" id="align_items_2" onclick="setProperty()" value="flex-start"><label for="align_items_2"><span>flex-start</span></label><br>
+                    <input type="radio" name="align_items" id="align_items_3" onclick="setProperty()" value="flex-end"><label for="align_items_3"><span>flex-end</span></label><br>
+                    <input type="radio" name="align_items" id="align_items_4" onclick="setProperty()" value="center"><label for="align_items_4"><span>center</span></label><br>
+                    <input type="radio" name="align_items" id="align_items_5" onclick="setProperty()" value="baseline"><label for="align_items_5"><span>baseline</span></label><br>
+                </div>
+    
+                <div>
+                    <h4 title="主轴在交叉轴的对齐方式(多条主轴的情况下)">align-content</h4>
+                    <input type="radio" name="align_content" id="align_content_1" onclick="setProperty()" value="stretch" checked><label for="align_content_1"><span>stretch</span></label><br>
+                    <input type="radio" name="align_content" id="align_content_2" onclick="setProperty()" value="flex-start"><label for="align_content_2"><span>flex-start</span></label><br>
+                    <input type="radio" name="align_content" id="align_content_3" onclick="setProperty()" value="flex-end"><label for="align_content_3"><span>flex-end</span></label><br>
+                    <input type="radio" name="align_content" id="align_content_4" onclick="setProperty()" value="center"><label for="align_content_4"><span>center</span></label><br>
+                    <input type="radio" name="align_content" id="align_content_5" onclick="setProperty()" value="space-between"><label for="align_content_5"><span>space-between</span></label><br>
+                    <input type="radio" name="align_content" id="align_content_6" onclick="setProperty()" value="space-around"><label for="align_content_6"><span>space-around</span></label><br>
+                    <input type="radio" name="align_content" id="align_content_7" onclick="setProperty()" value="space-evenly"><label for="align_content_7"><span>space-evenly</span></label><br>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+    <div id="main">
+        <div id="flex_container">
+            <div id="d1" onclick="clickItem(this.id)">1</div>
+            <div id="d2" onclick="clickItem(this.id)">2</div>
+            <div id="d3" onclick="clickItem(this.id)">3</div>
+            <div id="d4" onclick="clickItem(this.id)">4</div>
+            <div id="d5" onclick="clickItem(this.id)">5</div>
+            <div id="d6" onclick="clickItem(this.id)">6</div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <div id="item_panel" class="aside">
+        <!-- 增减项目控制面板 -->
+        <!-- <div id="num_control" class="control">
+            <h3>增减项目</h3>
+            <div>
+                <button onclick="add()">增加一个项目</button><button>减少一个项目</button>
+            </div>
+        </div> -->
+
+        <!-- 项目大小控制面板 -->
+        <div id="item_control" class="control">
+            <h3>调整项目大小</h3>
+            <p class="explain_setting" id="explain_setting">未选定项目<span class="explain">点击对应项目以进行调整</span></p>
+            <div>
+                <label for="item_width_control">宽度</label><input type="range" name="" id="item_width_control" min="20" max="350" value="0" oninput="setItemSize()"><span id="item_width_show"></span><br>
+                <label for="item_height_control">高度</label><input type="range" name="" id="item_height_control" min="20" max="350" value="0" oninput="setItemSize()"><span id="item_height_show"></span><br> 
+                <input type="checkbox" id="noHeight" onclick="noHeight()"><label for="noHeight">不设置高度</label><br> 
+                <label for="item_bgcolor_control">颜色</label><input type="color" name="" id="item_bgcolor_control" value="#cccccc" oninput="setItemSize()"><span id="item_bgcolor_show"></span><br>
+                <label for="item_font_control">字体</label><input type="range" name="" id="item_font_control" min="12" max="120" value="40" oninput="setItemSize()"><span id="item_font_show"></span><br> 
+            </div>
+        </div>
+
+        <!-- 项目属性控制面板 -->
+        <div id="item_property_control" class="control">
+            <h3>调整项目属性</h3>
+            <p class="explain_setting" id="explain_setting">未选定项目<span class="explain">点击对应项目以进行调整</span></p>
+            <div>
+                
+
+
+            </div>
+        </div>
+        
+    </div>
+
+
+
+
+    
+    <div id="footer">
+        ©郑维良
+    </div>
+
+    
+    
+</body>
+
+</html>

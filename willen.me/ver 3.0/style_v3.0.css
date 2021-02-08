@@ -1,0 +1,110 @@
+* {
+  margin: 0px;
+  padding: 0px;
+  font-family: "PingFang SC", Arial, Helvetica, "Microsoft Yahei", sans-serif;
+}
+body {
+  margin-bottom: 50px;
+  height: 1vh;
+  background-image: linear-gradient(to right, #f5f7fa, #c3cfe2);
+}
+a {
+  text-decoration: none;
+}
+
+header {
+  width: 100%;
+  height: 60px;
+  background-color: #222;
+  box-shadow: 0px 0px 5px rgba(126, 126, 126, 0.8);
+  position: fixed;
+  z-index: 999;
+}
+header img {
+  float: left;
+  width: 60px;
+}
+
+.willen {
+  float: left;
+  color: #fff;
+  font-size: 30px;
+  line-height: 60px;
+}
+
+#for_header {
+  height: 50px;
+}
+
+#container {
+  width: 80%;
+  padding: 20px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.card {
+  width: 340px;
+  height: 340px;
+  border-radius: 10px;
+  box-shadow: -1px 1px 4px rgba(0, 0, 0, 0.2);
+  margin: 10px;
+  position: relative;
+  overflow: hidden;
+  transition: 0.2s;
+}
+.card:hover {
+  box-shadow: -4px 4px 8px rgba(0, 0, 0, 0.3);
+}
+.bg_img {
+  width: 100%;
+  height: 85%;
+}
+.title {
+  width: 100%;
+  height: 15%;
+  background-color: #f2f2f2;
+  text-align: center;
+  line-height: 54px;
+  color: #2997ff;
+  font-size: 1.25rem;
+}
+
+.card_notion {
+  background: #fff url(img/Notion_app_logo.png) no-repeat 50% 50%/50%;
+}
+.card_codepen {
+  background: #fff url(img/codepen.png) no-repeat 50% 50%/50%;
+}
+.card_flex {
+  background: #e64a19
+    url(http://www.ruanyifeng.com/blogimg/asset/2015/bg2015071002.png) no-repeat
+    50% 50%/160%;
+}
+.card_clock {
+  background: none;
+}
+.card_shop {
+  background: #fff url(img/shop.png) no-repeat 50% 50%/160%;
+}
+
+/* 使鼠标放在clock卡片上仍能出现pointer，而不是iframe导致的箭头 */
+#for_clock {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+}
+
+footer {
+  width: 100%;
+  height: 20px;
+  position: fixed;
+  bottom: 0;
+  z-index: -999;
+  margin-top: 20px;
+  text-align: center;
+  line-height: 20px;
+  color: rgb(199, 199, 199);
+}
